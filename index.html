@@ -1,0 +1,481 @@
+<!doctype html>
+<title>jigsass-utils-offset</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="style.css?05" rel="stylesheet">
+<link href="jigsass-logo.png" rel="shortcut icon">
+<script type="text/javascript">WebFontConfig={google:{families:["Roboto:400,100,300,500:latin"]}},function(){var e=document.createElement("script");e.src="https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js",e.type="text/javascript",e.async="true";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}();</script>
+<script>examples={"base":"","target":"_self","css":["assets/sg.css"],"js":[],"bodyjs":[],"htmlcss":"background:none;border:0;clip:auto;display:block;height:auto;margin:0;padding:0;position:static;width:auto","bodycss":"background:none;border:0;clip:auto;display:block;height:auto;margin:0;padding:0;position:static;width:auto"};</script>
+
+<header>
+	<nav>
+		<img src="jigsass-logo.png" alt="jigsass-utils-offset">
+		
+	<ul>
+		
+				<li>
+					<a href="#offset-utils"><span>Offset Utils</span></a>
+					
+	<ul>
+		
+				<li>
+					<a href="#introduction"><span>Introduction</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-t--2"><span>u-t--2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-t--min-2"><span>u-t--min-2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-t--10"><span>u-t--10%</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-r--2"><span>u-r--2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-r--min-2"><span>u-r--min-2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-r--10"><span>u-r--10%</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-b--2"><span>u-b--2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-b--min-2"><span>u-b--min-2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-b--10"><span>u-b--10%</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-start--2"><span>u-start--2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-start--min-2"><span>u-start--min-2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-start--10"><span>u-start--10%</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-end--2"><span>u-end--2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-end--min-2"><span>u-end--min-2</span></a>
+					
+				</li>
+				
+				<li>
+					<a href="#u-end--10"><span>u-end--10%</span></a>
+					
+				</li>
+				
+	</ul>
+	
+				</li>
+				
+	</ul>
+	
+	</nav>
+</header>
+
+<main>
+	
+		<section id="offset-utils">
+			<h2>Offset Utils</h2>
+			<div>
+				
+				
+		<section id="introduction">
+			<h3>Introduction</h3>
+			<div>
+				<p><a href="https://npmjs.org/package/jigsass-utils-offset"><img src="https://badge.fury.io/js/jigsass-utils-offset.svg" alt="NPM version"></a>
+<a href="https://david-dm.org/TxHawks/jigsass-utils-offset"><img src="https://david-dm.org/TxHawks/jigsass-utils-offset.svg?theme=shields.io" alt="Dependency Status"></a></p>
+<p>A collection of dynamically generated utility classes for offsetting positioned elements.</p>
+<p>Class names follow the <a href="http://docs.emmet.io/cheat-sheet/">Emmet</a> abbreviation
+syntax, with colons (&#39;:&#39;) replaced by two dashes (<code>--</code>) to follow BEM naming
+conventions.</p>
+<h4 id="available-classes">Available classes</h4>
+<ul>
+<li><code>.u-t--&lt;amount&gt;</code>: top</li>
+<li><code>.u-end--&lt;amount&gt;</code>: horizontal end (right in <code>ltr</code>, right in <code>ltr</code>)</li>
+<li><code>.u-r--&lt;amount&gt;</code>: right</li>
+<li><code>.u-b--&lt;amount&gt;</code>: bottom</li>
+<li><code>.u-start--&lt;amount&gt;</code>: horizontal start (left in <code>ltr</code>, left in <code>ltr</code>)</li>
+<li><code>.u-l--&lt;amount&gt;</code>: left</li>
+</ul>
+<p>Where <code>&lt;amount&gt;</code> can be either a unitless number representing a number of
+typographic rhythm units as defined in
+<a href="https://txhawks.github.io/jigsass-tools-typography/#variable-jigsass-sizes">$jigsass-sizes</a>
+a percentage, or a length specified in pixels.</p>
+<p>JigSass Offset also supports negative offsets, using <code>min-&lt;number&gt;</code> modifiers
+(e.g., <code>h-t--min-4</code>), as well as auto ofsets (e.g., <code>h-b--auto</code>).</p>
+<h4 id="installation">Installation</h4>
+<p>Using npm:</p>
+<pre><code class="lang-sh">npm i -S jigsass-utils-offset
+</code></pre>
+<h4 id="usage">Usage</h4>
+<p>Import JigSass Utils Offset into your main scss file near its very end, together with all
+other utilities (utilities should always be the last to be imported).</p>
+<pre><code class="lang-scss">@import &#39;path/to/jigsass-utils-offset/scss/index&#39;;
+</code></pre>
+<p>Like all other JigSass Utils, JigSass Offset does not automatically generate any CSS
+when imported. You would need to explicitly indicate that each individual offset
+class should actually be generated in each component or object it is used in
+(clarification: This will include style declarations inside <code>.foo</code> and .<code>bar</code>):</p>
+<pre><code class="lang-scss">// _c.foo.scss
+.foo {
+  @include jigsass-util(u-t, $modifier: 6px); // &lt;-- top: 6px
+
+  ...
+}
+</code></pre>
+<pre><code class="lang-scss">// _c.bar.scss
+.bar {
+  @include jigsass-util(u-b, $modifier: 12px);  // &lt;-- bottom: 12px
+  @include jigsass-util(u-b, $modifier: 0, $from: large); // &lt;-- bottom: 0 from large bp and on.
+
+  ...
+}
+</code></pre>
+<p>Doing so helps us a great deal with portability, as no matter where we import component or object
+partials, the correct utility classes will be generated. Think of it as a poor man&#39;s dependency
+management.</p>
+<p>Developer communication is also assisted by including &quot;dependencies&quot; wherever they are required,
+as anyone going through a partial, can easily understand how it should be marked up with just a
+glance.</p>
+<p>As far as bloat goes, just don&#39;t worry about it - the actual styles will only be generated once,
+at the location in the cascade where the Jigsass Offset partial was imported into the main file.</p>
+<p>JigSass Offset classes are responsive-enabled, using <a href="https://txhawks.github.io/jigsass-tools-mq/">JigSass MQ</a>
+and the breakpoints defined in the <a href="https://txhawks.github.io/jigsass-tools-mq/#variable-jigsass-breakpoints">$jigsass-breakpoints</a> variable.</p>
+<p>Based on the breakpoint arguments passed to <code>jigsass-util</code> when including a Offset class,
+responsive modifiers are generated according to the following logic:</p>
+<pre><code class="lang-scss">.u-t--&lt;modifier&gt;[-[-from-&lt;breakpoint-name&gt;][-until-&lt;breakpoint-name&gt;][-misc-&lt;breakpoint-name&gt;]]
+</code></pre>
+<p>So, assuming the <code>medium</code>, <code>large</code> and <code>landscape</code> breakpoints are defined in <code>$jigsass-breakpoints</code>
+as <code>600px</code>, <code>1024px</code> and <code>(orientation: landscape)</code> respectively,</p>
+<pre><code class="lang-scss">@include jigsass-util(u-t, $modifier: 2);
+</code></pre>
+<p>will generate the <code>.u-t--2</code> class, which is not limited to any media-query.</p>
+<pre><code class="lang-scss">@include jigsass-util(u-b, $modifier: min-4, $until: medium);
+</code></pre>
+<p>will generate the <code>.u-b--min-4--until-medium</code> class, which will be in effect at
+<code>(max-width: 37.49em)</code> and will override styles in the default class until that point.</p>
+<pre><code class="lang-scss">@include jigsass-util(u-l, $modifier: 20%, $from: large, $misc: landscape);
+</code></pre>
+<p>will generate the <code>.u-l--20%--from-large-when-landscape</code> class, which will go into
+effect at <code>(min-width: 64em) and (orientation: landscape)</code> and will override styles in the default
+class under these  conditions.</p>
+<p><strong>License:</strong> MIT</p>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-t--2">
+			<h3>u-t--2</h3>
+			<div>
+				<p>A utility class to set the top offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-t, $modifier: 2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-t--2&#39;&gt;
+  This element&#39;s top offest is set to
+  2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-t--min-2">
+			<h3>u-t--min-2</h3>
+			<div>
+				<p>A utility class to set the top offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-t, $modifier: min-2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-t--min-2&#39;&gt;
+  This element&#39;s top offest is set to
+  -2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-t--10">
+			<h3>u-t--10%</h3>
+			<div>
+				<p>A utility class to set the top offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-t, $modifier: 10% [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-t--10%&#39;&gt;
+  This element&#39;s top offest is set to
+  10%
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-r--2">
+			<h3>u-r--2</h3>
+			<div>
+				<p>A utility class to set the right offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-r, $modifier: 2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-r--2&#39;&gt;
+  This element&#39;s right offest is set to
+  2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-r--min-2">
+			<h3>u-r--min-2</h3>
+			<div>
+				<p>A utility class to set the right offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-r, $modifier: min-2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-r--min-2&#39;&gt;
+  This element&#39;s right offest is set to
+  -2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-r--10">
+			<h3>u-r--10%</h3>
+			<div>
+				<p>A utility class to set the right offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-r, $modifier: 10% [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-r--10%&#39;&gt;
+  This element&#39;s right offest is set to
+  10%
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-b--2">
+			<h3>u-b--2</h3>
+			<div>
+				<p>A utility class to set the bottom offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-b, $modifier: 2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-b--2&#39;&gt;
+  This element&#39;s bottom offest is set to
+  2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-b--min-2">
+			<h3>u-b--min-2</h3>
+			<div>
+				<p>A utility class to set the bottom offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-b, $modifier: min-2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-b--min-2&#39;&gt;
+  This element&#39;s bottom offest is set to
+  -2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-b--10">
+			<h3>u-b--10%</h3>
+			<div>
+				<p>A utility class to set the bottom offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-b, $modifier: 10% [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-b--10%&#39;&gt;
+  This element&#39;s bottom offest is set to
+  10%
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-start--2">
+			<h3>u-start--2</h3>
+			<div>
+				<p>A utility class to set the horizontal start offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-start, $modifier: 2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-start--2&#39;&gt;
+  This element&#39;s horizontal start offest is set to
+  2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-start--min-2">
+			<h3>u-start--min-2</h3>
+			<div>
+				<p>A utility class to set the horizontal start offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-start, $modifier: min-2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-start--min-2&#39;&gt;
+  This element&#39;s horizontal start offest is set to
+  -2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-start--10">
+			<h3>u-start--10%</h3>
+			<div>
+				<p>A utility class to set the horizontal start offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-start, $modifier: 10% [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-start--10%&#39;&gt;
+  This element&#39;s horizontal start offest is set to
+  10%
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-end--2">
+			<h3>u-end--2</h3>
+			<div>
+				<p>A utility class to set the horizontal end offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-end, $modifier: 2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-end--2&#39;&gt;
+  This element&#39;s horizontal end offest is set to
+  2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-end--min-2">
+			<h3>u-end--min-2</h3>
+			<div>
+				<p>A utility class to set the horizontal end offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-end, $modifier: min-2 [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-end--min-2&#39;&gt;
+  This element&#39;s horizontal end offest is set to
+  -2 rhythm units
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+		<section id="u-end--10">
+			<h3>u-end--10%</h3>
+			<div>
+				<p>A utility class to set the horizontal end offset of an element.</p>
+<h4 id="include-with-">Include with:</h4>
+<pre><code class="lang-scss">@include jigsass-util(u-end, $modifier: 10% [, $from, $until, $misc]);
+</code></pre>
+<h4 id="example">Example</h4>
+<pre><code class="lang-example:html">&lt;div class=&#39;fpo  u-end--10%&#39;&gt;
+  This element&#39;s horizontal end offest is set to
+  10%
+&lt;/div&gt;
+</code></pre>
+
+				
+			</div>
+		</section>
+		
+			</div>
+		</section>
+		
+	<footer>Last modified Monday, 11 April 2016 15:10</footer>
+</main>
+<script src="prism.js"></script>
+<script src="examples.js"></script>
+<script src="script.js"></script>
+
