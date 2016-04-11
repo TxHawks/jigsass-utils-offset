@@ -1,0 +1,602 @@
+/* ---
+section: Offset Utils
+title: Introduction
+order: -10
+---
+
+[![NPM version][npm-image]][npm-url]
+[![Dependency Status][daviddm-image]][daviddm-url]
+
+A collection of dynamically generated utility classes for offsetting positioned elements.
+
+Class names follow the [Emmet](http://docs.emmet.io/cheat-sheet/) abbreviation
+syntax, with colons (':') replaced by two dashes (`--`) to follow BEM naming
+conventions.
+
+#### Available classes
+
+  - `.u-t--<amount>`: top
+  - `.u-end--<amount>`: horizontal end (right in `ltr`, right in `ltr`)
+  - `.u-r--<amount>`: right
+  - `.u-b--<amount>`: bottom
+  - `.u-start--<amount>`: horizontal start (left in `ltr`, left in `ltr`)
+  - `.u-l--<amount>`: left
+
+Where `<amount>` can be either a unitless number representing a number of
+typographic rhythm units as defined in
+[$jigsass-sizes](https://txhawks.github.io/jigsass-tools-typography/#variable-jigsass-sizes)
+a percentage, or a length specified in pixels.
+
+JigSass Offset also supports negative offsets, using `min-<number>` modifiers
+(e.g., `h-t--min-4`), as well as auto ofsets (e.g., `h-b--auto`).
+
+#### Installation
+
+Using npm:
+
+```sh
+npm i -S jigsass-utils-offset
+```
+
+#### Usage
+Import JigSass Utils Offset into your main scss file near its very end, together with all
+other utilities (utilities should always be the last to be imported).
+
+```scss
+@import 'path/to/jigsass-utils-offset/scss/index';
+```
+
+Like all other JigSass Utils, JigSass Offset does not automatically generate any CSS
+when imported. You would need to explicitly indicate that each individual offset
+class should actually be generated in each component or object it is used in
+(clarification: This will include style declarations inside `.foo` and .`bar`):
+
+```scss
+// _c.foo.scss
+.foo {
+  @include jigsass-util(u-t, $modifier: 6px); // <-- top: 6px
+
+  ...
+}
+```
+
+```scss
+// _c.bar.scss
+.bar {
+  @include jigsass-util(u-b, $modifier: 12px);  // <-- bottom: 12px
+  @include jigsass-util(u-b, $modifier: 0, $from: large); // <-- bottom: 0 from large bp and on.
+
+  ...
+}
+```
+
+Doing so helps us a great deal with portability, as no matter where we import component or object
+partials, the correct utility classes will be generated. Think of it as a poor man's dependency
+management.
+
+Developer communication is also assisted by including "dependencies" wherever they are required,
+as anyone going through a partial, can easily understand how it should be marked up with just a
+glance.
+
+As far as bloat goes, just don't worry about it - the actual styles will only be generated once,
+at the location in the cascade where the Jigsass Offset partial was imported into the main file.
+
+
+JigSass Offset classes are responsive-enabled, using [JigSass MQ](https://txhawks.github.io/jigsass-tools-mq/)
+and the breakpoints defined in the [$jigsass-breakpoints](https://txhawks.github.io/jigsass-tools-mq/#variable-jigsass-breakpoints) variable.
+
+Based on the breakpoint arguments passed to `jigsass-util` when including a Offset class,
+responsive modifiers are generated according to the following logic:
+
+```scss
+.u-t--<modifier>[-[-from-<breakpoint-name>][-until-<breakpoint-name>][-misc-<breakpoint-name>]]
+```
+
+So, assuming the `medium`, `large` and `landscape` breakpoints are defined in `$jigsass-breakpoints`
+as `600px`, `1024px` and `(orientation: landscape)` respectively,
+
+```scss
+@include jigsass-util(u-t, $modifier: 2);
+```
+will generate the `.u-t--2` class, which is not limited to any media-query.
+
+```scss
+@include jigsass-util(u-b, $modifier: min-4, $until: medium);
+```
+
+will generate the `.u-b--min-4--until-medium` class, which will be in effect at
+`(max-width: 37.49em)` and will override styles in the default class until that point.
+
+```scss
+@include jigsass-util(u-l, $modifier: 20%, $from: large, $misc: landscape);
+```
+
+will generate the `.u-l--20%--from-large-when-landscape` class, which will go into
+effect at `(min-width: 64em) and (orientation: landscape)` and will override styles in the default
+class under these  conditions.
+
+
+**License:** MIT
+
+
+
+[npm-image]: https://badge.fury.io/js/jigsass-utils-offset.svg
+[npm-url]: https://npmjs.org/package/jigsass-utils-offset
+
+[daviddm-image]: https://david-dm.org/TxHawks/jigsass-utils-offset.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/TxHawks/jigsass-utils-offset
+*/
+.u-t--2 {
+  top: 2rem;
+  /* ---
+section:  Offset Utils
+title: u-t--2
+order: 1
+---
+A utility class to set the top offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-t, $modifier: 2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-t--2'>
+  This element's top offest is set to
+  2 rhythm units
+</div>
+```
+*/
+}
+
+.u-t--min-2 {
+  top: -2rem;
+  /* ---
+section:  Offset Utils
+title: u-t--min-2
+order: 2
+---
+A utility class to set the top offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-t, $modifier: min-2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-t--min-2'>
+  This element's top offest is set to
+  -2 rhythm units
+</div>
+```
+*/
+}
+
+.u-t--10\% {
+  top: 10%;
+  /* ---
+section:  Offset Utils
+title: u-t--10%
+order: 3
+---
+A utility class to set the top offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-t, $modifier: 10% [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-t--10%'>
+  This element's top offest is set to
+  10%
+</div>
+```
+*/
+}
+
+.u-r--2 {
+  right: 2rem;
+  /* ---
+section:  Offset Utils
+title: u-r--2
+order: 4
+---
+A utility class to set the right offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-r, $modifier: 2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-r--2'>
+  This element's right offest is set to
+  2 rhythm units
+</div>
+```
+*/
+}
+
+.u-r--min-2 {
+  right: -2rem;
+  /* ---
+section:  Offset Utils
+title: u-r--min-2
+order: 5
+---
+A utility class to set the right offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-r, $modifier: min-2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-r--min-2'>
+  This element's right offest is set to
+  -2 rhythm units
+</div>
+```
+*/
+}
+
+.u-r--10\% {
+  right: 10%;
+  /* ---
+section:  Offset Utils
+title: u-r--10%
+order: 6
+---
+A utility class to set the right offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-r, $modifier: 10% [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-r--10%'>
+  This element's right offest is set to
+  10%
+</div>
+```
+*/
+}
+
+.u-b--2 {
+  bottom: 2rem;
+  /* ---
+section:  Offset Utils
+title: u-b--2
+order: 7
+---
+A utility class to set the bottom offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-b, $modifier: 2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-b--2'>
+  This element's bottom offest is set to
+  2 rhythm units
+</div>
+```
+*/
+}
+
+.u-b--min-2 {
+  bottom: -2rem;
+  /* ---
+section:  Offset Utils
+title: u-b--min-2
+order: 8
+---
+A utility class to set the bottom offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-b, $modifier: min-2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-b--min-2'>
+  This element's bottom offest is set to
+  -2 rhythm units
+</div>
+```
+*/
+}
+
+.u-b--10\% {
+  bottom: 10%;
+  /* ---
+section:  Offset Utils
+title: u-b--10%
+order: 9
+---
+A utility class to set the bottom offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-b, $modifier: 10% [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-b--10%'>
+  This element's bottom offest is set to
+  10%
+</div>
+```
+*/
+}
+
+.u-start--2 {
+  left: 2rem;
+  /* ---
+section:  Offset Utils
+title: u-start--2
+order: 10
+---
+A utility class to set the horizontal start offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-start, $modifier: 2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-start--2'>
+  This element's horizontal start offest is set to
+  2 rhythm units
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-start--2 {
+  left: 2rem;
+}
+
+[dir=rtl] .u-start--2 {
+  right: 2rem;
+}
+
+.u-start--min-2 {
+  left: -2rem;
+  /* ---
+section:  Offset Utils
+title: u-start--min-2
+order: 11
+---
+A utility class to set the horizontal start offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-start, $modifier: min-2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-start--min-2'>
+  This element's horizontal start offest is set to
+  -2 rhythm units
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-start--min-2 {
+  left: -2rem;
+}
+
+[dir=rtl] .u-start--min-2 {
+  right: -2rem;
+}
+
+.u-start--10\% {
+  left: 10%;
+  /* ---
+section:  Offset Utils
+title: u-start--10%
+order: 12
+---
+A utility class to set the horizontal start offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-start, $modifier: 10% [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-start--10%'>
+  This element's horizontal start offest is set to
+  10%
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-start--10\% {
+  left: 10%;
+}
+
+[dir=rtl] .u-start--10\% {
+  right: 10%;
+}
+
+.u-end--2 {
+  right: 2rem;
+  /* ---
+section:  Offset Utils
+title: u-end--2
+order: 13
+---
+A utility class to set the horizontal end offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-end, $modifier: 2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-end--2'>
+  This element's horizontal end offest is set to
+  2 rhythm units
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-end--2 {
+  right: 2rem;
+}
+
+[dir=rtl] .u-end--2 {
+  left: 2rem;
+}
+
+.u-end--min-2 {
+  right: -2rem;
+  /* ---
+section:  Offset Utils
+title: u-end--min-2
+order: 14
+---
+A utility class to set the horizontal end offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-end, $modifier: min-2 [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-end--min-2'>
+  This element's horizontal end offest is set to
+  -2 rhythm units
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-end--min-2 {
+  right: -2rem;
+}
+
+[dir=rtl] .u-end--min-2 {
+  left: -2rem;
+}
+
+.u-end--10\% {
+  right: 10%;
+  /* ---
+section:  Offset Utils
+title: u-end--10%
+order: 15
+---
+A utility class to set the horizontal end offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(u-end, $modifier: 10% [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  u-end--10%'>
+  This element's horizontal end offest is set to
+  10%
+</div>
+```
+*/
+}
+
+[dir=ltr] .u-end--10\% {
+  right: 10%;
+}
+
+[dir=rtl] .u-end--10\% {
+  left: 10%;
+}
+
+html {
+  font-size: 37.5%;
+}
+
+body {
+  font-size: 2.6666666667em;
+  line-height: 4rem;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0 !important;
+}
+
+.fpo {
+  background-color: #09a5d9;
+  color: #fff;
+  padding: 1rem;
+  position: relative;
+}
+
+figure,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}

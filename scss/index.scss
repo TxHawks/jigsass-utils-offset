@@ -1,0 +1,334 @@
+// *************************************
+//
+// # jigsass-utils-offset
+// -> Utility classes for offsetting positioned elements
+//
+// Author: TxHawks (tofu.hawks@gmail.com)
+// https://txhawks.github.io/jigsass-tools-offset/
+//
+// *************************************
+
+@charset 'UTF-8';
+
+// -------------------------------------
+
+@if (not mixin-exists(jigsass-define-util)) {
+  @error '`jigsass-utils-offset` has a dependency on `jigsass-tools-selectors`. ' +
+    'Please import it before importing this file.'
+}
+
+
+
+
+
+// -------------------------------------
+// Introduction
+// -------------------------------------
+
+// stylelint-disable
+/* ---
+section: Offset Utils
+title: Introduction
+order: -10
+---
+
+[![NPM version][npm-image]][npm-url]
+[![Dependency Status][daviddm-image]][daviddm-url]
+
+A collection of dynamically generated utility classes for offsetting positioned elements.
+
+Class names follow the [Emmet](http://docs.emmet.io/cheat-sheet/) abbreviation
+syntax, with colons (':') replaced by two dashes (`--`) to follow BEM naming
+conventions.
+
+#### Available classes
+
+  - `.u-t--<amount>`: top
+  - `.u-end--<amount>`: horizontal end (right in `ltr`, right in `ltr`)
+  - `.u-r--<amount>`: right
+  - `.u-b--<amount>`: bottom
+  - `.u-start--<amount>`: horizontal start (left in `ltr`, left in `ltr`)
+  - `.u-l--<amount>`: left
+
+Where `<amount>` can be either a unitless number representing a number of
+typographic rhythm units as defined in
+[$jigsass-sizes](https://txhawks.github.io/jigsass-tools-typography/#variable-jigsass-sizes)
+a percentage, or a length specified in pixels.
+
+JigSass Offset also supports negative offsets, using `min-<number>` modifiers
+(e.g., `h-t--min-4`), as well as auto ofsets (e.g., `h-b--auto`).
+
+#### Installation
+
+Using npm:
+
+```sh
+npm i -S jigsass-utils-offset
+```
+
+#### Usage
+Import JigSass Utils Offset into your main scss file near its very end, together with all
+other utilities (utilities should always be the last to be imported).
+
+```scss
+@import 'path/to/jigsass-utils-offset/scss/index';
+```
+
+Like all other JigSass Utils, JigSass Offset does not automatically generate any CSS
+when imported. You would need to explicitly indicate that each individual offset
+class should actually be generated in each component or object it is used in
+(clarification: This will include style declarations inside `.foo` and .`bar`):
+
+```scss
+// _c.foo.scss
+.foo {
+  @include jigsass-util(u-t, $modifier: 6px); // <-- top: 6px
+
+  ...
+}
+```
+
+```scss
+// _c.bar.scss
+.bar {
+  @include jigsass-util(u-b, $modifier: 12px);  // <-- bottom: 12px
+  @include jigsass-util(u-b, $modifier: 0, $from: large); // <-- bottom: 0 from large bp and on.
+
+  ...
+}
+```
+
+Doing so helps us a great deal with portability, as no matter where we import component or object
+partials, the correct utility classes will be generated. Think of it as a poor man's dependency
+management.
+
+Developer communication is also assisted by including "dependencies" wherever they are required,
+as anyone going through a partial, can easily understand how it should be marked up with just a
+glance.
+
+As far as bloat goes, just don't worry about it - the actual styles will only be generated once,
+at the location in the cascade where the Jigsass Offset partial was imported into the main file.
+
+
+JigSass Offset classes are responsive-enabled, using [JigSass MQ](https://txhawks.github.io/jigsass-tools-mq/)
+and the breakpoints defined in the [$jigsass-breakpoints](https://txhawks.github.io/jigsass-tools-mq/#variable-jigsass-breakpoints) variable.
+
+Based on the breakpoint arguments passed to `jigsass-util` when including a Offset class,
+responsive modifiers are generated according to the following logic:
+
+```scss
+.u-t--<modifier>[-[-from-<breakpoint-name>][-until-<breakpoint-name>][-misc-<breakpoint-name>]]
+```
+
+So, assuming the `medium`, `large` and `landscape` breakpoints are defined in `$jigsass-breakpoints`
+as `600px`, `1024px` and `(orientation: landscape)` respectively,
+
+```scss
+@include jigsass-util(u-t, $modifier: 2);
+```
+will generate the `.u-t--2` class, which is not limited to any media-query.
+
+```scss
+@include jigsass-util(u-b, $modifier: min-4, $until: medium);
+```
+
+will generate the `.u-b--min-4--until-medium` class, which will be in effect at
+`(max-width: 37.49em)` and will override styles in the default class until that point.
+
+```scss
+@include jigsass-util(u-l, $modifier: 20%, $from: large, $misc: landscape);
+```
+
+will generate the `.u-l--20%--from-large-when-landscape` class, which will go into
+effect at `(min-width: 64em) and (orientation: landscape)` and will override styles in the default
+class under these  conditions.
+
+
+**License:** MIT
+
+
+
+[npm-image]: https://badge.fury.io/js/jigsass-utils-offset.svg
+[npm-url]: https://npmjs.org/package/jigsass-utils-offset
+
+[daviddm-image]: https://david-dm.org/TxHawks/jigsass-utils-offset.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/TxHawks/jigsass-utils-offset
+*/
+// stylelint-enable
+
+
+
+
+
+// -------------------------------------
+// Variables
+// -------------------------------------
+
+/// A constant for translating util names to properties.
+/// ---
+/// @type Map
+/// ---
+/// @access private
+/// ---
+$_jigsass-offset-sides: (
+  u-t: top,
+  u-r: right,
+  u-b: bottom,
+  u-l: left,
+  u-start: start,
+  u-end: end
+);
+
+
+// Used internally to store doclets
+$_doclet-store: () !default;
+
+// Used internally for ordering doclets
+$_jigsass-util-offset-i: 1;
+
+
+
+// -------------------------------------
+// Definitions
+// -------------------------------------
+
+@each $util-name, $side in $_jigsass-offset-sides {
+  @include jigsass-define-util($util-name) {
+    $_type: map-get($_jigsass-offset-sides, $jigsass-util-name);
+
+    @if(not $jigsass-util-modifier) {
+      @error 'jigsass-utils-offset: #{$jigsass-util-name} must be passed a ' +
+        'value as a modifier.';
+    }
+
+    $_auto: $jigsass-util-modifier == auto;
+    $_neg: type-of($jigsass-util-modifier) != number and
+      str-index($jigsass-util-modifier, min-) == 1;
+    $_modifier: if(
+      $_neg,
+      jigsass-str-to-number(str-slice($jigsass-util-modifier, 4)),
+      $jigsass-util-modifier
+    );
+
+    @if(
+      not $_auto and
+      (type-of($_modifier) != number or not index(px '' '%', unit($_modifier)))
+    ) {
+      @error 'jigsass-utils-offset: A length modifier must be a unitless number,' +
+        'a percentage or a length in pixels to #{$jigsass-util-name}. \a' +
+        'You are trying to pass the #{type-of($_modifier)} `#{$jigsass-util-modifier}`.';
+    }
+
+    // When length is in rhythm units
+    @if (not $_auto and unitless($_modifier)) {
+      @if ($_type == start) {
+        @include jigsass-bidi(
+          start,
+          jigsass-rhythm($_modifier, $unit: rem),
+          $rem: true
+        );
+
+        [dir=ltr] & {
+          @include jigsass-rem(
+            left,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+
+        [dir=rtl] & {
+          @include jigsass-rem(
+            right,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+      }
+      @else if ($_type == end) {
+        @include jigsass-bidi(
+          end,
+          jigsass-rhythm($_modifier, $unit: rem),
+          $rem: true
+        );
+
+        [dir=ltr] & {
+          @include jigsass-rem(
+            right,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+
+        [dir=rtl] & {
+          @include jigsass-rem(
+            left,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+      }
+      @else {
+        @include jigsass-rem(
+          $_type,
+          jigsass-rhythm($_modifier, $unit: rem)
+        );
+      }
+    }
+
+    // When modifier is auto or length is in pixels
+    @else {
+      @if ($_type == start) {
+        @include jigsass-bidi(start, $_modifier, $rem: false);
+
+        [dir=ltr] & {
+          left: $_modifier;
+        }
+
+        [dir=rtl] & {
+          right: $_modifier;
+        }
+      }
+      @else if ($_type == end) {
+        @include jigsass-bidi($_type, $_modifier, $rem: false);
+
+        [dir=ltr] & {
+          right: $_modifier;
+        }
+
+        [dir=rtl] & {
+          left: $_modifier;
+        }
+      }
+      @else {
+        #{$_type}: $_modifier;
+      }
+    }
+
+    $_doclet: $jigsass-util-name + ($jigsass-util-modifier or '');
+    $_side: if(index(start end, $_type), horizontal $_type, $_type);
+    @if (not index($_doclet-store, $_doclet)) {
+      $_doclet-store: append($_doclet-store, $_doclet) !global;
+      // stylelint-disable
+/* ---
+section:  Offset Utils
+title: #{$jigsass-util-name}--#{$jigsass-util-modifier}
+order: #{$_jigsass-util-offset-i}
+---
+A utility class to set the #{$_side} offset of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(#{$jigsass-util-name}, $modifier: #{$jigsass-util-modifier} [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  #{$jigsass-util-name}--#{$jigsass-util-modifier}'>
+  This element's #{$_side} offest is set to
+  #{$_modifier}#{if(type-of($_modifier) == number and unitless($_modifier), ' rhythm units', '')}
+</div>
+```
+*/
+      // stylelint-enable
+      $_jigsass-util-offset-i: $_jigsass-util-offset-i + 1 !global;
+    }
+  }
+}

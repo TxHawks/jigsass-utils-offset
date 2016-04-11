@@ -1,0 +1,175 @@
+# JigSass Utils Offset
+[![NPM version][npm-image]][npm-url]  [![Dependency Status][daviddm-image]][daviddm-url]   
+
+ > Utility classes for offsetting positioned elements
+
+Class names follow the [Emmet](http://docs.emmet.io/cheat-sheet/) abbreviation
+syntax, with colons (':') replaced by two dashes (`--`) to follow BEM naming
+conventions.
+
+## Available classes
+
+  - `.u-t--<amount>`: top
+  - `.u-end--<amount>`: horizontal end (right in `ltr`, right in `ltr`)
+  - `.u-r--<amount>`: right
+  - `.u-b--<amount>`: bottom
+  - `.u-start--<amount>`: horizontal start (left in `ltr`, left in `ltr`)
+  - `.u-l--<amount>`: left
+
+Where `<amount>` can be either a unitless number representing a number of
+typographic rhythm units as defined in
+[$jigsass-sizes](https://txhawks.github.io/jigsass-tools-typography/#variable-jigsass-sizes)
+a percentage, or a length specified in pixels.
+
+JigSass Offset also supports negative offsets, using `min-<number>` modifiers
+(e.g., `h-t--min-4`), as well as auto ofsets (e.g., `h-b--auto`).
+
+## Installation
+
+Using npm:
+
+```sh
+npm i -S jigsass-utils-offset
+```
+
+## Usage
+Import JigSass Utils Offset into your main scss file near its very end, together with all
+other utilities (utilities should always be the last to be imported).
+
+```scss
+@import 'path/to/jigsass-utils-offset/scss/index';
+```
+
+Like all other JigSass Utils, JigSass Offset does not automatically generate any CSS
+when imported. You would need to explicitly indicate that each individual offset
+class should actually be generated in each component or object it is used in
+(clarification: This will include style declarations inside `.foo` and .`bar`):
+
+```scss
+// _c.foo.scss
+.foo {
+  @include jigsass-util(u-t, $modifier: 6px); // <-- top: 6px
+
+  ...
+}
+```
+
+```scss
+// _c.bar.scss
+.bar {
+  @include jigsass-util(u-b, $modifier: 12px);  // <-- bottom: 12px
+  @include jigsass-util(u-b, $modifier: 0, $from: large); // <-- bottom: 0 from large bp and on.
+
+  ...
+}
+```
+
+Doing so helps us a great deal with portability, as no matter where we import component or object
+partials, the correct utility classes will be generated. Think of it as a poor man's dependency
+management.
+
+Developer communication is also assisted by including "dependencies" wherever they are required,
+as anyone going through a partial, can easily understand how it should be marked up with just a
+glance.
+
+As far as bloat goes, just don't worry about it - the actual styles will only be generated once,
+at the location in the cascade where the Jigsass Offset partial was imported into the main file.
+
+
+JigSass Offset classes are responsive-enabled, using [JigSass MQ](https://txhawks.github.io/jigsass-tools-mq/)
+and the breakpoints defined in the [$jigsass-breakpoints](https://txhawks.github.io/jigsass-tools-mq/#variable-jigsass-breakpoints) variable.
+
+Based on the breakpoint arguments passed to `jigsass-util` when including a Offset class,
+responsive modifiers are generated according to the following logic:
+
+```scss
+.u-t--<modifier>[-[-from-<breakpoint-name>][-until-<breakpoint-name>][-misc-<breakpoint-name>]]
+```
+
+So, assuming the `medium`, `large` and `landscape` breakpoints are defined in `$jigsass-breakpoints`
+as `600px`, `1024px` and `(orientation: landscape)` respectively,
+
+```scss
+@include jigsass-util(u-t, $modifier: 2);
+```
+will generate the `.u-t--2` class, which is not limited to any media-query.
+
+```scss
+@include jigsass-util(u-b, $modifier: min-4, $until: medium);
+```
+
+will generate the `.u-b--min-4--until-medium` class, which will be in effect at
+`(max-width: 37.49em)` and will override styles in the default class until that point.
+
+```scss
+@include jigsass-util(u-l, $modifier: 20%, $from: large, $misc: landscape);
+```
+
+will generate the `.u-l--20%--from-large-when-landscape` class, which will go into
+effect at `(min-width: 64em) and (orientation: landscape)` and will override styles in the default
+class under these  conditions.
+
+
+## Documentation
+
+The full documentation was generated using mdcss, and is available at 
+[https://txhawks.github.io/jigsass-utils-offset/](https://txhawks.github.io/jigsass-utils-offset/)
+
+## Contributing
+
+It is a best practice for JigSass modules to *not* automatically generate css on `@import`, but 
+rather have the user explicitly enable the generation of specific styles from the module.
+
+Contributions in the form of pull-requests, issues, bug reports, etc. are welcome.
+Please feel free to fork, hack or modify JigSass Offset in any way you see fit.
+
+#### Writing documentation
+
+Good documentation is crucial for usability, scalability and maintainability. When 
+contributing, please do make sure that both its Sass functionality (functions, mixins, 
+variables and placeholder selectors), as well as the CSS it generates (selectors, 
+concepts, usage exmples, etc.) are well documented.
+
+Jigsass Offset uses Jonathan Neal's [mdcss](//github.com/jonathantneal/mdcss).
+
+When styles and documentation comments are not automatically generated by your module on `@import`,
+please use the `sgSrc/sg.scss` file to enable their generation.
+
+In addition, any file in `sgSrc/assets` will be available for use in the style guide.
+
+
+
+## File structure
+```bash
+┬ ./
+│
+├─┬ scss/ 
+│ └─ index.scss # The module's importable file.
+│
+├─┬ sgSrc/      # Style guide sources
+│ │
+│ ├── sg.scc    # It is a best practice for JigSass 
+│ │             # modules to not automatically generate 
+│ │             # css and documentation on `@import.` 
+│ │             # Please use this file to enable css
+│ │             # and documentation comments) generation.
+│ │
+│ └── assets/   # Files in `sgSrc/assets` will be 
+│               # available for use in the style guide
+│
+└─┬ docs/      # Documention
+  │
+  └── styleguide/ # Generated documentation 
+                  # of the module's CSS
+```
+
+
+**License:** MIT
+
+
+
+[npm-image]: https://badge.fury.io/js/jigsass-utils-offset.svg
+[npm-url]: https://npmjs.org/package/jigsass-utils-offset
+
+[daviddm-image]: https://david-dm.org/TxHawks/jigsass-utils-offset.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/TxHawks/jigsass-utils-offset

@@ -1,0 +1,191 @@
+// *************************************
+//
+// # jigsass-utils-position
+// -> A collection of dynamically generated utility classes for setting CSS position values
+//
+// Author: TxHawks (tofu.hawks@gmail.com)
+// https://txhawks.github.io/jigsass-utils-position/
+//
+// *************************************
+
+@charset 'UTF-8';
+
+// -------------------------------------
+// Dependencies
+// -------------------------------------
+
+@if (not mixin-exists(jigsass-define-util)) {
+  @error '`jigsass-utils-position` has a dependency on `jigsass-tools-selectors`. ' +
+    'Please import it before importing this file.'
+}
+
+
+
+
+
+// -------------------------------------
+// Variables
+// -------------------------------------
+
+/// A constant for translating util names to properties.
+/// ---
+/// @type Map
+/// ---
+/// @access private
+/// ---
+$_jigsass-position-sides: (
+  u-t: top,
+  u-r: right,
+  u-b: bottom,
+  u-l: left,
+  u-start: start,
+  u-end: end
+);
+
+
+
+
+
+// -------------------------------------
+// Definitions
+// -------------------------------------
+
+@each $util-name, $side in $_jigsass-position-sides {
+  @include jigsass-define-util($util-name) {
+    $_type: map-get($_jigsass-position-sides, $jigsass-util-name);
+
+    @if(not $jigsass-util-modifier) {
+      @error 'jigsass-utils-position: #{$jigsass-util-name} must be passed a ' +
+        'value as a modifier.';
+    }
+
+    $_auto: $jigsass-util-modifier == auto;
+    $_neg: type-of($jigsass-util-modifier) != number and
+      str-index($jigsass-util-modifier, min-) == 1;
+    $_modifier: if(
+      $_neg,
+      jigsass-str-to-number(str-slice($jigsass-util-modifier, 4)),
+      $jigsass-util-modifier
+    );
+
+    @if(
+      not $_auto and
+      (type-of($_modifier) != number or not index(px '' '%', unit($_modifier)))
+    ) {
+      @error 'jigsass-utils-position: A length modifier must be a unitless number,' +
+        'a percentage or a length in pixels to #{$jigsass-util-name}. \a' +
+        'You are trying to pass the #{type-of($_modifier)} `#{$jigsass-util-modifier}`.';
+    }
+
+    // When length is in rhythm units
+    @if (not $_auto and unitless($_modifier)) {
+      @if ($_type == start) {
+        @include jigsass-bidi(
+          start,
+          jigsass-rhythm($_modifier, $unit: rem),
+          $rem: true
+        );
+
+        [dir=ltr] & {
+          @include jigsass-rem(
+            left,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+
+        [dir=rtl] & {
+          @include jigsass-rem(
+            right,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+      }
+      @else if ($_type == end) {
+        @include jigsass-bidi(
+          end,
+          jigsass-rhythm($_modifier, $unit: rem),
+          $rem: true
+        );
+
+        [dir=ltr] & {
+          @include jigsass-rem(
+            right,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+
+        [dir=rtl] & {
+          @include jigsass-rem(
+            left,
+            jigsass-rhythm($_modifier, $unit: rem)
+          );
+        }
+      }
+      @else {
+        @include jigsass-rem(
+          $_type,
+          jigsass-rhythm($_modifier, $unit: rem)
+        );
+      }
+    }
+
+    // When modifier is auto or length is in pixels
+    @else {
+      @if ($_type == start) {
+        @include jigsass-bidi(start, $_modifier, $rem: false);
+
+        [dir=ltr] & {
+          left: $_modifier;
+        }
+
+        [dir=rtl] & {
+          right: $_modifier;
+        }
+      }
+      @else if ($_type == end) {
+        @include jigsass-bidi($_type, $_modifier, $rem: false);
+
+        [dir=ltr] & {
+          right: $_modifier;
+        }
+
+        [dir=rtl] & {
+          left: $_modifier;
+        }
+      }
+      @else {
+        #{$_type}: $_modifier;
+      }
+    }
+
+    $_doclet: $jigsass-util-name + ($jigsass-util-modifier or '');
+    $_side: if(index(start end, $_type), horizontal $_type, $_type);
+    @if (not index($_doclet-store, $_doclet)) {
+      $_doclet-store: append($_doclet-store, $_doclet) !global;
+      // stylelint-disable
+/* ---
+section:  Offset Utils
+title: #{$jigsass-util-name}--#{$jigsass-util-modifier}
+order: #{$_jigsass-util-position-i}
+---
+A utility class to set the #{$_side} position of an element.
+
+#### Include with:
+
+```scss
+@include jigsass-util(#{$jigsass-util-name}, $modifier: #{$jigsass-util-modifier} [, $from, $until, $misc]);
+```
+
+#### Example
+
+```example:html
+<div class='fpo  #{$jigsass-util-name}--#{$jigsass-util-modifier}'>
+  This element's #{$_side} offest is set to `#{$_modifier}`
+</div>
+```
+*/
+      // stylelint-enable
+      $_jigsass-util-position-i: $_jigsass-util-position-i + 1 !global;
+    }
+  }
+}
